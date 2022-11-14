@@ -1,0 +1,24 @@
+{% extends "inc/base.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-4">
+        <h1>New questions</h1>
+    </div>
+    <div class="col-8">
+        <h3><a href="{% url 'hot' %}" class="top-questions">Top questions</a></h3>
+    </div>
+</div>
+
+{% for question in questions %}
+    {% include 'inc/question_template.html' %}
+{% endfor %}
+
+{% if questions|length %}
+    {% include 'inc/paginator.html' %} 
+{% else %}
+    {% include 'inc/empty_list.html' %}
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% load static %}
+
+<div class="card-body cart empty-list">
+    <div class="text-center empty-list">
+        <img src="{% static 'img/empty.png' %}" width="130" height="130" class="img-fluid mb-4 mr-3">
+        <h3><strong>
+            {{ if_empty.title }}
+        </strong></h3>
+        <h4>
+            {{ if_empty.description }}
+        </h4>
+    </div>
+</div>

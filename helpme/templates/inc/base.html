@@ -1,0 +1,153 @@
+<!doctype html>
+
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Help Me</title>
+    <link rel="shortcut icon" href="{% static 'img/logo.ico' %}">
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-5">
+                    <img class="logo" src="{% static 'img/logo.png' %}" alt="" />
+                    <a class="navbar-brand top-panel" href="{% url 'index' %}">Help Me</a>
+                </div>
+                <div class="col-5">
+                    <form class="d-flex" role="search">
+                        <input class="form-control search-input top-panel" type="search" placeholder="find something.."
+                            aria-label="Search">
+                        <button class="btn btn-outline-success search-btn top-panel" type="submit">Search</button>
+                        <form>
+                            <button class="btn btn-outline-success new-question-btn top-panel"
+                                formaction="{% url 'ask' %}">Ask</button>
+                        </form>
+                    </form>
+                </div>
+                <div class="col-2">
+                    {% if is_auth %}
+
+                    <div class="profile">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="header-avatar">
+                                    <img src="{% static 'img/avatar1.jpg' %}">
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <h4 class="username">vvinokurshin</h4>
+                                <div class="button mt-2 d-flex flex-row align-items-center">
+                                    <form>
+                                        <button
+                                            class="btn btn-sm btn-outline-primary w-100 button-settings" formaction="{% url 'settings' %}">settings</button>
+                                    </form>
+                                    <form>
+                                        <button class="btn btn-sm btn-primary w-100 ml-2"
+                                            formaction="{% url 'login' %}">logout</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% else %}
+
+                    <div class="profile-unauthorized">
+                        <div class="button mt-2 d-flex flex-row align-items-center">
+                            <form>
+                                <button class="btn btn-sm btn-outline-primary w-100 button-settings"
+                                    formaction="{% url 'login' %}">log&nbsp;in</button>
+                            </form>
+                            <form>
+                                <button class=" btn btn-sm btn-primary w-100 ml-2" formaction="{% url 'signup' %}">register</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="row">
+            <div class="col-8">
+                
+                {% block content %}
+                {% endblock %}
+
+            </div>
+            <div class="col-4">
+                <div class="card right-module">
+                    <div class="card-body">
+                        <h5 class="card-title tags-title">Popular tags</h5>
+                        <p class="card-text tags-links">
+                            {% for tag in top_tags %}
+                                <a href="{% url 'tag' tag_name=tag.name %}" class="card-link">{{ tag.name }}</a>
+                            {% endfor %}
+                        </p>
+                        <p class="card-text tags-links">
+                            {% for tag in top_tags.top4_5 %}
+                                <a href="{% url 'tag' tag_name=tag.name %}" class="card-link">{{ tag.name }}</a>
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+                <div class="card right-module">
+                    <div class="card-body">
+                        <h5 class="font-weight-bold mb-3 best-members-title">Best Members</h5>
+                        <ul class="list-group list-group-flush best-members-links">
+                        {% for user in top_users %}
+                            <li class="list-group-item"><a href="{% url 'profile' user_id=user.id %}" class="card-link">{{user.user.username}}</a></li>
+                        {% endfor %}
+                            <!-- <li class="list-group-item"><a href="#!" class="card-link">vvinokurshin</a></li>
+                            <li class="list-group-item"><a href="#!" class="card-link">p1xel</a></li> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <section class="footer">
+        <footer class="bg-secondary text-white">
+            <div class="container p-4">
+                <div class="row">
+                    <div class="col-lg-8 col-md-12 mb-4 mb-md-0">
+                        <h5 class="text-uppercase">Help Me</h5>
+                        <p>This site is for users to ask questions and get answers to them.</p>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase">Links</h5>
+                        <li>
+                            <a href="https://t.me/vvinokurshin" class="text-white">Telegram</a>
+                        </li>
+                        <li>
+                            <a href="https://vk.com/vvinokurshin" class="text-white">VK</a>
+                        </li>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center p-3" style="background-color: rgb(33, 37, 41);">
+                © 2022 Copyright:
+                <a class="text-white" href="https://park.vk.company/feed/">VK Education</a>
+            </div>
+        </footer>
+    </section>
+
+
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+{% extends "inc/base.html" %}
+
+{% block content %}
+
+<h1>Profile: {{ profile }}</h1>
+<br />
+
+<div class="row">
+    <div class="col-4">
+        <div class="profile-avatar">
+            <img src="../static/{{ profile.avatar }}">
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="card-body p-4">
+            <h6>Information</h6>
+            <hr class="mt-0 mb-4">
+            <div class="row pt-1">
+                <div class="col-6 mb-3">
+                    <h6>Fullname</h6>
+                    <p class="text-muted">{{ profile.user.first_name }} 
+                        {{ profile.user.last_name }}</p>
+                </div>
+                <div class="col-6 mb-3">
+                    <h6>Joined at</h6>
+                    <p class="text-muted">{{ profile.user.date_joined }}</p>
+                </div>
+            </div>
+            <h6>Activity</h6>
+            <hr class="mt-0 mb-4">
+            <div class="row pt-1">
+                <div class="col-6 mb-3">
+                    <h6>Questions</h6>
+                    <p class="text-muted">{{ profile.question_count }}</p>
+                </div>
+                <div class="col-6 mb-3">
+                    <h6>Anwers</h6>
+                    <p class="text-muted">{{ profile.answer_count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<br />
+
+<h2>{{ profile }}'s questions:</h2>
+
+{% for question in questions %}
+{% include 'inc/question_template.html' %}
+{% endfor %}
+
+{% if questions|length %}
+{% include 'inc/paginator.html' %}
+{% else %}
+{% include 'inc/empty_list.html' %}
+{% endif %}
+
+{% endblock %}

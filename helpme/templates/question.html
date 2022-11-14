@@ -1,0 +1,48 @@
+
+{% extends "inc/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-3">
+        <div class="question-avatar">
+            <img src="../static/{{ question.user.avatar }}">
+        </div>
+        <div class="question-likes-module">
+            {% include 'inc/likes.html' %}
+        </div>
+    </div>
+    <div class="col-9">
+        <h1> {{ question.title }} </h1>
+        <p> {{ question.text }} </p>
+        <div class="row">
+            {% include 'inc/tags.html' %}
+            {% include 'inc/from_user.html' %}
+        </div>
+    </div>
+</div>
+<hr />
+<h2>Answers:</h2>
+
+{% for answer in answers %}
+    {% include 'inc/answer_template.html' %}
+{% endfor %}
+
+{% if answers|length %}
+    {% include 'inc/paginator.html' %} 
+{% else %}
+    {% include 'inc/empty_list.html' %}
+{% endif %}
+
+<hr />
+<div class="mb-3 add-answer">
+    <label for="exampleFormControlTextarea1" class="form-label">Your answer</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"
+        maxlength="1000"
+        minlength="10"></textarea>
+    <button type="submit" class="btn btn-primary">Answer</button>
+</div>
+
+{% endblock %}

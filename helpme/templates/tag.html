@@ -1,0 +1,19 @@
+{% extends "inc/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<h1>Tag: {{ tag_name }}</h1>
+
+{% for question in questions %}
+    {% include 'inc/question_template.html' %}
+{% endfor %}
+
+{% if questions|length %}
+    {% include 'inc/paginator.html' %} 
+{% else %}
+    {% include 'inc/empty_list.html' %}
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,6 @@
+<div class="col-8">
+    Tags:
+    {% for cur_tag in question.tags.all %}
+        <a href="{% url 'tag' tag_name=cur_tag %}" class="tags-link">{{ cur_tag }}</a>
+    {% endfor %}
+</div>

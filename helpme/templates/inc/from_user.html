@@ -1,0 +1,8 @@
+<div class="col-4">
+    From:
+    {% if answer %}
+    <a href="{% url 'profile' user_id=answer.user.id %}" class="tags-link">{{ answer.user }}</a>
+    {% else %}
+    <a href="{% url 'profile' user_id=question.user.id %}" class="tags-link"> {{ question.user }}</a>
+    {% endif %}
+</div>

@@ -1,0 +1,17 @@
+<p>
+    <button class="dislike">-</button>
+    {% if answer %}
+        {% if answer.raiting > 0 %}
+            +{{ answer.raiting }}
+        {% else %}
+            {{ answer.raiting }}
+        {% endif %}
+    {% else %}
+        {% if question.raiting > 0 %}
+            +{{ question.raiting }}
+        {% else %}
+            {{ question.raiting }}
+        {% endif %}
+    {% endif %}
+    <button class="like">+</button>
+</p>

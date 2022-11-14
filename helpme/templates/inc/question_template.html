@@ -1,0 +1,31 @@
+{% load static %}
+
+<div class="question">
+    <div class="row">
+        <div class="col-2">
+            <div class="avatar">
+                <img src="../static/{{ question.user.avatar }}" alt="" />
+            </div>
+            <div class="likes-module">
+                {% include 'inc/likes.html' %}
+            </div>
+        </div>
+        <div class="col-10">
+            <h2 class="question-title"><a href="{% url 'question' question_id=question.id %}" class="question-link">
+                    {{ question.title }}</a></h2>
+            <div class="question-text">
+                {{ question.text }}
+            </div>
+            <div class="question-links">
+                <div class="row">
+                    <div class="col-4">
+                        <a href="{% url 'question' question_id=question.id %}"
+                            class="answers-link">answers
+                            ({{ question.count_answers }})</a>
+                    </div>
+                    {% include 'inc/tags.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

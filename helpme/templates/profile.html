@@ -1,5 +1,5 @@
 {% extends "inc/base.html" %}
-
+{% load static %}
 {% block content %}
 
 <h1>Profile: {{ profile }}</h1>
@@ -8,7 +8,11 @@
 <div class="row">
     <div class="col-4">
         <div class="profile-avatar">
-            <img src="../static/{{ profile.avatar }}">
+            {% if profile.avatar %}
+                <img src="../{{ profile.avatar }}">
+            {% else %}
+                <img src="{% static 'img/default.png' %}">
+            {% endif %}
         </div>
     </div>
     <div class="col-8">

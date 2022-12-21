@@ -1,37 +1,12 @@
 {% extends "inc/base.html" %}
 
+{% load bootstrap5 %}
 {% block content %}
 
 <h1>New question</h1>
-<form class="new-question">
-    <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Title</label>
-        <input type="text" class="form-control" id="exampleFormControlInput1"
-            placeholder="How to create a question?" maxlength="80"
-            minlength="10">
-        <div id="TitleHelpBlock" class="form-text">
-            Enter a title that briefly describes your problem. The length of the
-            title should be from
-            10 to 80 characters.
-        </div>
-    </div>
-    <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">Text</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1"
-            rows="10" maxlength="2000"
-            minlength="10"></textarea>
-        <div id="TextHelpBlock" class="form-text">
-            Describe your problem in the most detail.
-        </div>
-    </div>
-    <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Tags</label>
-        <input type="text" class="form-control" id="exampleFormControlInput1"
-            placeholder="Python PostgreSQL" maxlength="80" minlength="3">
-        <div id="TagsHelpBlock" class="form-text">
-            There may be several tags, list them separated by a space.
-        </div>
-    </div>
+<form novalidate action="/ask/" method="POST" class="new-question">
+    {% csrf_token %}
+    {% bootstrap_form form %}
     <button type="submit" class="btn btn-primary">Ask</button>
 </form>
 

@@ -33,17 +33,21 @@
                     </form>
                 </div>
                 <div class="col-2">
-                    {% if is_auth %}
+                    {% if user.is_authenticated %}
 
                     <div class="profile">
                         <div class="row">
                             <div class="col-5">
                                 <div class="header-avatar">
-                                    <img src="{% static 'img/avatar1.jpg' %}">
+                                    {% if auth_user.avatar %}
+                                    <img src="../{{ auth_user.avatar }}">
+                                    {% else %}
+                                    <img src="{% static 'img/default.png' %}">
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="col-7">
-                                <h4 class="username">vvinokurshin</h4>
+                                <h4 class="username">{{user.username}}</h4>
                                 <div class="button mt-2 d-flex flex-row align-items-center">
                                     <form>
                                         <button
@@ -51,7 +55,7 @@
                                     </form>
                                     <form>
                                         <button class="btn btn-sm btn-primary w-100 ml-2"
-                                            formaction="{% url 'login' %}">logout</button>
+                                            formaction="{% url 'logout' %}">logout</button>
                                     </form>
                                 </div>
                             </div>
@@ -111,8 +115,6 @@
                         {% for user in top_users %}
                             <li class="list-group-item"><a href="{% url 'profile' user_id=user.id %}" class="card-link">{{user.user.username}}</a></li>
                         {% endfor %}
-                            <!-- <li class="list-group-item"><a href="#!" class="card-link">vvinokurshin</a></li>
-                            <li class="list-group-item"><a href="#!" class="card-link">p1xel</a></li> -->
                         </ul>
                     </div>
                 </div>

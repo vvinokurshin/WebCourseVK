@@ -7,24 +7,32 @@ class ProfileManager(models.Manager):
     def get_top_users(self, count=5):
         return self.annotate(answer_count=Count('answer')).order_by('-answer_count')[:count]
 
-    def get_user_by_id(self, id):
+    def get_profile_by_id(self, id):
         try:
             return self.annotate(question_count=Count('question', distinct=True), answer_count=Count('answer', distinct=True)).get(id=id)
+        except Profile.DoesNotExist:
+            return None
+
+    def get_prof_by_user_id(self, id):
+        try:
+            return self.get(user_id=id)
         except Profile.DoesNotExist:
             return None
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
-    avatar = models.ImageField(null=True, blank=True, upload_to='static/img/')
+    avatar = models.ImageField(null=True, blank=True, upload_to='static/uploads/')
     objects = ProfileManager()
 
     def __str__(self):
         return str(self.user.username)
 
+
 class TagManager(models.Manager):
     def get_top_tags(self, count=7):
         return self.annotate(q_count=Count('question')).order_by('-q_count')[:count]
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=20)
@@ -54,9 +62,8 @@ class QuestionManager(models.Manager):
         except Question.DoesNotExist:
             return None
 
-    def get_question_by_user(self, user_id):
+    def get_questions_by_user(self, user_id):
         return self.get_info_questions().filter(user_id=user_id).order_by('-publish_date')
-
 
 
 class Question(models.Model):
@@ -70,14 +77,14 @@ class Question(models.Model):
     def __str__(self):
         return str(self.title)
 
+
 class AnswerManages(models.Manager):
     def get_info_answers(self):
         return self.annotate(raiting=Count('likeanswer', distinct=True) - Count('dislikeanswer', distinct=True))
     
     def get_answers_for_question(self, id):
-        return self.get_info_answers().filter(question_id=id).order_by('-is_correct', '-publish_date')
+        return self.get_info_answers().filter(question_id=id).order_by('-is_correct', 'publish_date')
 
-    
 
 class Answer(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -100,9 +107,11 @@ class DislikeQuestion(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     from_user = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
+
 class LikeAnswer(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
     from_user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
 
 class DislikeAnswer(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)

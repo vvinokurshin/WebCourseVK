@@ -11,4 +11,5 @@ urlpatterns = [
     path('tag/<tag_name>', views.tag, name='tag'),
     path('settings/', views.settings, name='settings'),
     path('profile/<int:user_id>', views.profile, name='profile'),
+    path('logout/', views.logout, name='logout')
 ]

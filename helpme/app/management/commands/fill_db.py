@@ -46,7 +46,7 @@ class Command(BaseCommand):
 
             cur_user = self.create_user()
             users.append(cur_user)
-            profiles.append(Profile(user=cur_user, avatar=f'uploads/avatar{r.randint(1, 8)}.jpg'))
+            profiles.append(Profile(user=cur_user, avatar=f'static/uploads/avatar{r.randint(1, 8)}.jpg'))
 
         User.objects.bulk_create(users)
         Profile.objects.bulk_create(profiles)

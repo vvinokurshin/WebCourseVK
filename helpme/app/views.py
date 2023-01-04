@@ -60,6 +60,9 @@ def question(request: HttpRequest, question_id: int):
     if request.method == 'GET':
         answer_form = forms.AnswerForm()
     elif request.method == 'POST':
+        if str(request.user) == 'AnonymousUser':
+            return redirect(f'/login/?continue={request.path}')
+    
         answer_form = forms.AnswerForm(request.POST)
 
         if answer_form.is_valid():

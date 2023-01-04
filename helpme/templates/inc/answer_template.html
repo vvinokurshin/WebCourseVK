@@ -23,7 +23,7 @@
                     <div class="col-8">
                         <div class="form-check form-switch">
                             {% if answer.is_correct %}
-                                {% if auth_user and question.user == auth_user %}
+                                {% if user.is_authenticated and question.user == user.profile %}
                                     <input class="form-check-input" type="checkbox"
                                         id="flexSwitchCheckChecked" checked>
                                 {% else %}
@@ -31,7 +31,7 @@
                                         id="flexSwitchCheckChecked" checked disabled>
                                 {% endif %}
                             {% else %}
-                                {% if auth_user and question.user == auth_user %}
+                                {% if user.is_authenticated and question.user == user.profile %}
                                     <input class="form-check-input" type="checkbox"
                                         id="flexSwitchCheckChecked">
                                 {% else %}

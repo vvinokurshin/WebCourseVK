@@ -19,8 +19,8 @@
         </div>
         <div class="col-3">
             <div class="question-avatar">
-                {% if auth_user.avatar %}
-                    <img src="../{{ auth_user.avatar }}">
+                {% if user.profile.avatar %}
+                    <img src="../{{ user.profile.avatar }}">
                 {% else %}
                     <img src="{% static 'img/default.png' %}">
                 {% endif %}

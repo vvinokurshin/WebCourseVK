@@ -1,17 +1,9 @@
 <p>
-    <button class="dislike">-</button>
     {% if answer %}
-        {% if answer.raiting > 0 %}
-            +{{ answer.raiting }}
-        {% else %}
-            {{ answer.raiting }}
-        {% endif %}
+        <button class="dislike" data-essence="answer" data-id="{{ answer.id }}" data-count="{{answer.raiting}}">-</button>
+        <button class="like" data-essence="answer" data-id="{{ answer.id }}">+</button>
     {% else %}
-        {% if question.raiting > 0 %}
-            +{{ question.raiting }}
-        {% else %}
-            {{ question.raiting }}
-        {% endif %}
+        <button class="dislike" data-essence="question" data-id="{{ question.id }}" data-count="{{question.raiting}}">-</button>
+        <button class="like" data-essence="question" data-id="{{ question.id }}">+</button>
     {% endif %}
-    <button class="like">+</button>
 </p>

@@ -1,15 +1,19 @@
 from django import forms
-from app import models 
+from app import models
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'mb-3'}), min_length=4)
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'mb-3'}), min_length=8)
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'mb-3'}), min_length=4)
+    password = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class': 'mb-3'}), min_length=8)
 
 
 class RegistrationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'mb-3'}), min_length=8, help_text='The minimum length is 8 characters')
-    password_confirm = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'mb-3'}), min_length=8)
+    password = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class': 'mb-3'}), min_length=8, help_text='The minimum length is 8 characters')
+    password_confirm = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'mb-3'}), min_length=8)
 
     class Meta:
         model = models.User
@@ -34,19 +38,24 @@ class RegistrationForm(forms.ModelForm):
 
         if self.cleaned_data['password'] != self.cleaned_data['password_confirm']:
             self.add_error('password_confirm', "Passwords don't match")
-        
-        email_count = models.User.objects.filter(email=self.cleaned_data['email']).count()
+
+        email_count = models.User.objects.filter(
+            email=self.cleaned_data['email']).count()
 
         if email_count:
-            self.add_error('email', 'A user with such an email has already been registered')
+            self.add_error(
+                'email', 'A user with such an email has already been registered')
 
         if len(self.cleaned_data['username']) < 4:
-            self.add_error('username', 'The minimum length of the username is 4')
+            self.add_error(
+                'username', 'The minimum length of the username is 4')
 
-        username_count = models.User.objects.filter(username=self.cleaned_data['username']).count()
+        username_count = models.User.objects.filter(
+            username=self.cleaned_data['username']).count()
 
         if username_count:
-            self.add_error('username', 'A user with such an username has already been registered')
+            self.add_error(
+                'username', 'A user with such an username has already been registered')
 
         return self.cleaned_data
 
@@ -73,7 +82,7 @@ class AvatarForm(forms.ModelForm):
         }
 
     def save(self, profile):
-        profile.avatar = self.data['avatar'] 
+        profile.avatar = self.data['avatar']
         profile.save()
         return profile
 
@@ -106,15 +115,18 @@ class SettingsForm(forms.ModelForm):
         last_data = models.User.objects.get(id=self.user_id)
 
         try:
-            existed_username_user = models.User.objects.get(username=self.cleaned_data['username'])
+            existed_username_user = models.User.objects.get(
+                username=self.cleaned_data['username'])
 
             if existed_username_user != last_data:
-                self.add_error('username', 'A user with such an username has already been registered')
+                self.add_error(
+                    'username', 'A user with such an username has already been registered')
         except models.User.DoesNotExist:
             pass
 
         if len(self.cleaned_data['username']) < 4:
-            self.add_error('username', 'The minimum length of the username is 4')
+            self.add_error(
+                'username', 'The minimum length of the username is 4')
 
         return self.cleaned_data
 
@@ -128,7 +140,8 @@ class SettingsForm(forms.ModelForm):
 
 
 class QuestionForm(forms.ModelForm):
-    tags = forms.CharField(widget=forms.TextInput(attrs={'class': 'mb-3'}), help_text='There may be several tags, list them separated by a space')
+    tags = forms.CharField(widget=forms.TextInput(attrs={
+                           'class': 'mb-3'}), help_text='There may be several tags, list them separated by a space')
 
     class Meta:
         model = models.Question
@@ -158,7 +171,8 @@ class QuestionForm(forms.ModelForm):
             self.add_error('title', 'The minimum length of the title is 3')
 
         if 'text' not in self.cleaned_data.keys() or len(self.cleaned_data['text']) < 5:
-            self.add_error('text', 'The minimum length of the text of the question text is 5')
+            self.add_error(
+                'text', 'The minimum length of the text of the question text is 5')
 
     def save(self, profile):
         question = super().save(commit=False)
@@ -189,8 +203,9 @@ class AnswerForm(forms.ModelForm):
         self.fields['text'].required = False
 
     def clean(self):
-       if 'text' not in self.cleaned_data.keys() or len(self.cleaned_data['text']) < 5:
-                self.add_error('text', 'The minimum length of the text of the question text is 5')
+        if 'text' not in self.cleaned_data.keys() or len(self.cleaned_data['text']) < 5:
+            self.add_error(
+                'text', 'The minimum length of the text of the question text is 5')
 
     def save(self, profile, question):
         answer = super().save(commit=False)

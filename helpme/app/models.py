@@ -22,7 +22,7 @@ class ProfileManager(models.Manager):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
-    avatar = models.ImageField(null=True, blank=True, upload_to='static/uploads/')
+    avatar = models.ImageField(null=True, blank=True, upload_to='avatar/')
     objects = ProfileManager()
 
     def __str__(self):
@@ -44,15 +44,15 @@ class Tag(models.Model):
 
 class QuestionManager(models.Manager):
     def get_info_questions(self):
-        return self.annotate(count_answers=Count('answer', distinct=True), 
-                      raiting=Count('likequestion', distinct=True) - Count('dislikequestion', distinct=True))
+        return self.annotate(count_answers=Count('answer', distinct=True),
+                             raiting=Count('likequestion', distinct=True) - Count('dislikequestion', distinct=True))
 
     def get_new_questions(self):
         return self.get_info_questions().order_by('-publish_date')
 
     def get_top_questions(self):
         return self.get_info_questions().order_by('-raiting')
-    
+
     def get_questions_by_tag(self, tag_name):
         return self.get_info_questions().filter(tags__name=tag_name).order_by('-publish_date')
 
@@ -64,6 +64,9 @@ class QuestionManager(models.Manager):
 
     def get_questions_by_user(self, user_id):
         return self.get_info_questions().filter(user_id=user_id).order_by('-publish_date')
+
+    def is_question_from_this_user(self, question_id, user_id):
+        return self.filter(id=question_id, user_id=user_id).exists()
 
 
 class Question(models.Model):
@@ -81,9 +84,26 @@ class Question(models.Model):
 class AnswerManages(models.Manager):
     def get_info_answers(self):
         return self.annotate(raiting=Count('likeanswer', distinct=True) - Count('dislikeanswer', distinct=True))
-    
+
     def get_answers_for_question(self, id):
         return self.get_info_answers().filter(question_id=id).order_by('-is_correct', 'publish_date')
+
+    def get_answer(self, id):
+        try:
+            return self.get_info_answers().get(id=id)
+        except Answer.DoesNotExist:
+            return None
+
+    def is_answer_from_this_user(self, answer_id, user_id):
+        return self.filter(id=answer_id, user_id=user_id).exists()
+
+    def get_correct_answer_for_question(self, question_id):
+        answers = self.filter(question_id=question_id, is_correct=True)
+
+        if len(answers):
+            return answers[0]
+
+        return None
 
 
 class Answer(models.Model):
@@ -96,13 +116,13 @@ class Answer(models.Model):
 
     def __str__(self):
         return f"{str(self.text)[:80]}..."
-    
+
 
 class LikeQuestion(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     from_user = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
-    
+
 class DislikeQuestion(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     from_user = models.ForeignKey(Profile, on_delete=models.CASCADE)

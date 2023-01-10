@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Help Me</title>
     <link rel="shortcut icon" href="{% static 'img/logo.ico' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
@@ -40,14 +41,16 @@
                             <div class="col-5">
                                 <div class="header-avatar">
                                     {% if user.profile.avatar %}
-                                    <img src="../{{ user.profile.avatar }}">
+                                    <img src="{{ MEDIA_URL }}{{ user.profile.avatar }}">
                                     {% else %}
                                     <img src="{% static 'img/default.png' %}">
                                     {% endif %}
                                 </div>
                             </div>
                             <div class="col-7">
-                                <h4 class="username">{{user.username}}</h4>
+                                <h4>
+                                <a class="username" href="{% url 'profile' user_id=user.profile.id %}" class="card-link">{{user.username}}</a></li>
+                                </h4>
                                 <div class="button mt-2 d-flex flex-row align-items-center">
                                     <form>
                                         <button
@@ -123,33 +126,38 @@
         </div>
     </main>
 
-    <section class="footer">
-        <footer class="bg-secondary text-white">
-            <div class="container p-4">
-                <div class="row">
-                    <div class="col-lg-8 col-md-12 mb-4 mb-md-0">
-                        <h5 class="text-uppercase">Help Me</h5>
-                        <p>This site is for users to ask questions and get answers to them.</p>
-                    </div>
-                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
-                        <h5 class="text-uppercase">Links</h5>
-                        <li>
-                            <a href="https://t.me/vvinokurshin" class="text-white">Telegram</a>
-                        </li>
-                        <li>
-                            <a href="https://vk.com/vvinokurshin" class="text-white">VK</a>
-                        </li>
-                    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        var csrftoken = '{{ csrf_token }}';
+    </script>
+</body>
+
+<section class="footer">
+    <footer class="bg-secondary text-white">
+        <div class="container p-4">
+            <div class="row">
+                <div class="col-lg-8 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Help Me</h5>
+                    <p>This site is for users to ask questions and get answers to them.</p>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Links</h5>
+                    <li>
+                        <a href="https://t.me/vvinokurshin" class="text-white">Telegram</a>
+                    </li>
+                    <li>
+                        <a href="https://vk.com/vvinokurshin" class="text-white">VK</a>
+                    </li>
                 </div>
             </div>
-            <div class="text-center p-3" style="background-color: rgb(33, 37, 41);">
-                © 2022 Copyright:
-                <a class="text-white" href="https://park.vk.company/feed/">VK Education</a>
-            </div>
-        </footer>
-    </section>
-
-
-</body>
+        </div>
+        <div class="text-center p-3" style="background-color: rgb(33, 37, 41);">
+            © 2022 Copyright:
+            <a class="text-white" href="https://park.vk.company/feed/">VK Education</a>
+        </div>
+    </footer>
+</section>
 
 </html>

@@ -91,7 +91,7 @@
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 .right-module {
@@ -136,6 +136,7 @@ button.like {
     width: 30px;
     height: 30px;
     margin: 0 auto;
+    margin-left: 20px;
     border-radius: 50%;
     color: rgba(0, 150, 136, 1);
     background-color: rgba(38, 166, 154, 0.3);
@@ -144,7 +145,9 @@ button.like {
     font-size: 15px;
 }
 
-button.dislike {
+
+.dislike {
+    position: relative;
     width: 30px;
     height: 30px;
     margin: 0 auto;
@@ -154,6 +157,15 @@ button.dislike {
     border-color: rgba(255, 82, 82, 1);
     border-width: 1px;
     font-size: 15px;
+}
+
+.dislike:after {
+    color: rgb(0, 0, 0);
+    content: attr(data-count);
+    left: 100%;
+    margin-left: 9px;
+    font-size: 15px;
+    position: absolute;
 }
 
 button.learnmore {
@@ -251,7 +263,7 @@ button.learnmore {
 
 .wrong-help-text {
     color: red;
-}  
+}
 
 .change-avatar-module {
     margin-top: 30px;
@@ -301,4 +313,8 @@ button.learnmore {
     object-fit: cover;
     border-radius: 50%;
     border: 2px solid rgb(0, 0, 0);
+}
+
+.toast {
+    --bs-toast-bg: rgb(48, 149, 255);
 }

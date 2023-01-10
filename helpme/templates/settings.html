@@ -20,7 +20,7 @@
         <div class="col-3">
             <div class="question-avatar">
                 {% if user.profile.avatar %}
-                    <img src="../{{ user.profile.avatar }}">
+                    <img src="{{ MEDIA_URL }}{{ user.profile.avatar }}">
                 {% else %}
                     <img src="{% static 'img/default.png' %}">
                 {% endif %}

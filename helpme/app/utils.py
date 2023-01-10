@@ -1,12 +1,14 @@
 from django.core.paginator import Paginator
 from app.models import *
 
+
 def paginate(objects_list, request, per_page=10):
     p = Paginator(objects_list, per_page)
     num_page = request.GET.get('page')
-    page = p.get_page(num_page) 
+    page = p.get_page(num_page)
 
     return gen_page_for_paginator(page)
+
 
 def gen_page_for_paginator(page):
     count_pages = len(page.paginator.page_range)
@@ -25,11 +27,13 @@ def gen_page_for_paginator(page):
         cur_page['range'] = range(1, count_pages + 1)
 
     cur_page['object_list'] = page.object_list
-    cur_page['previous'] = page.previous_page_number() if page.has_previous() else None
+    cur_page['previous'] = page.previous_page_number(
+    ) if page.has_previous() else None
     cur_page['next'] = page.next_page_number() if page.has_next() else None
     cur_page['number'] = page.number
 
     return cur_page
+
 
 def get_questions_by_tag(all_questions, tag):
     questions = []
@@ -40,12 +44,15 @@ def get_questions_by_tag(all_questions, tag):
 
     return questions
 
+
 def sort_questions(questions, reverse=True):
     return sorted(questions, key=lambda x: x['likes'], reverse=reverse)
+
 
 def add_info_about_question(questions):
     for question in questions:
         question_item = question
-        question_item['count_answers'] = Answer.objects.get_count_answers_for_question(question.id)
+        question_item['count_answers'] = Answer.objects.get_count_answers_for_question(
+            question.id)
         question_item['image'] = Question.objects.get_user_avatar(question.id)
         question_item['tags'] = Question.objects.get_tags(question.id)

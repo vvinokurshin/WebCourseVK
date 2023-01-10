@@ -6,6 +6,7 @@ import random as r
 
 from django.db.models import Min, Q
 
+
 class Command(BaseCommand):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,7 +35,7 @@ class Command(BaseCommand):
             username=self.fake.unique.user_name(),
             first_name=self.fake.first_name(),
             last_name=self.fake.last_name()
-        )  
+        )
 
     def create_users(self):
         users = []
@@ -46,12 +47,14 @@ class Command(BaseCommand):
 
             cur_user = self.create_user()
             users.append(cur_user)
-            profiles.append(Profile(user=cur_user, avatar=f'static/uploads/avatar{r.randint(1, 8)}.jpg'))
+            profiles.append(
+                Profile(user=cur_user, avatar=f'static/uploads/avatar{r.randint(1, 8)}.jpg'))
 
         User.objects.bulk_create(users)
         Profile.objects.bulk_create(profiles)
 
-        self.start_id_profile = Profile.objects.all().aggregate(Min('id'))['id__min']
+        self.start_id_profile = Profile.objects.all().aggregate(Min('id'))[
+            'id__min']
         self.end_id_profile = self.start_id_profile + Profile.objects.all().count() - 1
         print("Users Done")
 
@@ -65,7 +68,7 @@ class Command(BaseCommand):
             symbols = list(self.fake.unique.word())
             r.shuffle(symbols)
             tag = Tag(name=''.join(symbols))
-        
+
         return tag
 
     def create_tags(self):
@@ -111,7 +114,8 @@ class Command(BaseCommand):
         print("Questions Done")
 
         questions = Question.objects.bulk_create(questions)
-        self.start_id_question = Question.objects.all().aggregate(Min('id'))['id__min']
+        self.start_id_question = Question.objects.all().aggregate(Min('id'))[
+            'id__min']
         self.end_id_question = self.start_id_question + Question.objects.all().count() - 1
 
         for i in range(self.count * 10):
@@ -143,7 +147,8 @@ class Command(BaseCommand):
 
         if len(answers):
             Answer.objects.bulk_create(answers)
-        self.start_id_answer = Answer.objects.all().aggregate(Min('id'))['id__min']
+        self.start_id_answer = Answer.objects.all().aggregate(Min('id'))[
+            'id__min']
         self.end_id_answer = self.start_id_answer + Answer.objects.all().count() - 1
         print("Answers Done")
 
@@ -165,11 +170,14 @@ class Command(BaseCommand):
             while True:
                 profile_id = self.get_random_profile_id()
                 question_id = self.get_random_question_id()
-                this_question_from_this_user = Question.objects.filter(id=question_id, user_id=profile_id).exists()
-                liked_by_this_user = LikeQuestion.objects.filter(question_id=question_id, from_user_id=profile_id).exists()
+                this_question_from_this_user = Question.objects.filter(
+                    id=question_id, user_id=profile_id).exists()
+                liked_by_this_user = LikeQuestion.objects.filter(
+                    question_id=question_id, from_user_id=profile_id).exists()
 
                 if not this_question_from_this_user and not liked_by_this_user:
-                    likes.append(LikeQuestion(question_id=question_id, from_user_id=profile_id))
+                    likes.append(LikeQuestion(
+                        question_id=question_id, from_user_id=profile_id))
                     break
 
             if ((i + 1) % (10000) == 0):
@@ -190,12 +198,16 @@ class Command(BaseCommand):
             while True:
                 profile_id = self.get_random_profile_id()
                 question_id = self.get_random_question_id()
-                this_question_from_this_user = Question.objects.filter(id=question_id, user_id=profile_id).exists()
-                liked_by_this_user = LikeQuestion.objects.filter(question_id=question_id, from_user_id=profile_id).exists()
-                disliked_by_this_user = DislikeQuestion.objects.filter(question_id=question_id, from_user_id=profile_id).exists()
+                this_question_from_this_user = Question.objects.filter(
+                    id=question_id, user_id=profile_id).exists()
+                liked_by_this_user = LikeQuestion.objects.filter(
+                    question_id=question_id, from_user_id=profile_id).exists()
+                disliked_by_this_user = DislikeQuestion.objects.filter(
+                    question_id=question_id, from_user_id=profile_id).exists()
 
                 if not this_question_from_this_user and not liked_by_this_user and not disliked_by_this_user:
-                    dislikes.append(DislikeQuestion(question_id=question_id, from_user_id=profile_id))
+                    dislikes.append(DislikeQuestion(
+                        question_id=question_id, from_user_id=profile_id))
                     break
 
             if ((i + 1) % (10000) == 0):
@@ -208,7 +220,6 @@ class Command(BaseCommand):
         # DislikeQuestion.objects.bulk_create(dislikes)
         print("Dislikes Q Done")
 
-
     def create_likes_answers(self):
         likes = []
 
@@ -219,11 +230,14 @@ class Command(BaseCommand):
             while True:
                 profile_id = self.get_random_profile_id()
                 answer_id = self.get_random_answer_id()
-                this_answer_from_this_user = Answer.objects.filter(id=answer_id, user_id=profile_id).exists()
-                liked_by_this_user = LikeAnswer.objects.filter(answer_id=answer_id, from_user_id=profile_id).exists()
+                this_answer_from_this_user = Answer.objects.filter(
+                    id=answer_id, user_id=profile_id).exists()
+                liked_by_this_user = LikeAnswer.objects.filter(
+                    answer_id=answer_id, from_user_id=profile_id).exists()
 
                 if not this_answer_from_this_user and not liked_by_this_user:
-                    likes.append(LikeAnswer(answer_id=answer_id, from_user_id=profile_id))
+                    likes.append(LikeAnswer(
+                        answer_id=answer_id, from_user_id=profile_id))
                     break
 
             if ((i + 1) % (10000) == 0):
@@ -246,12 +260,16 @@ class Command(BaseCommand):
             while True:
                 profile_id = self.get_random_profile_id()
                 answer_id = self.get_random_answer_id()
-                this_answer_from_this_user = Answer.objects.filter(id=answer_id, user_id=profile_id).exists()
-                liked_by_this_user = LikeAnswer.objects.filter(answer_id=answer_id, from_user_id=profile_id).exists()
-                disliked_by_this_user = DislikeAnswer.objects.filter(answer_id=answer_id, from_user_id=profile_id).exists()
+                this_answer_from_this_user = Answer.objects.filter(
+                    id=answer_id, user_id=profile_id).exists()
+                liked_by_this_user = LikeAnswer.objects.filter(
+                    answer_id=answer_id, from_user_id=profile_id).exists()
+                disliked_by_this_user = DislikeAnswer.objects.filter(
+                    answer_id=answer_id, from_user_id=profile_id).exists()
 
                 if not this_answer_from_this_user and not liked_by_this_user and not disliked_by_this_user:
-                    dislikes.append(DislikeAnswer(answer_id=answer_id, from_user_id=profile_id))
+                    dislikes.append(DislikeAnswer(
+                        answer_id=answer_id, from_user_id=profile_id))
                     break
 
             if ((i + 1) % (10000) == 0):
